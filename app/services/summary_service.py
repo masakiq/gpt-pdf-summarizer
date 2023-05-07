@@ -10,13 +10,10 @@ from .conversations import Conversations
 
 
 @st.cache_resource
-def set_openai_api_key(API_KEY: Optional[str] = None):
+def set_openai_api_key():
 
     if 'OPENAI_API_KEY' in os.environ:
         openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-    if API_KEY is not None:
-        openai.api_key = API_KEY
 
     print("set API_KEY: ", openai.api_key)
 
