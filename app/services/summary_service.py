@@ -39,7 +39,7 @@ def generate_summary(text: str, max_length: int = 100) -> str:
 def summarize_large_text(conversations: Conversations,
                          text: str,
                          max_summarize_chars: int = 9000,
-                         max_chars_per_request: int = 3000,
+                         max_chars_per_request: int = 2000,
                          summary_chars_length: int = 1000) -> Conversations:
     wrapped_text = textwrap.wrap(text, max_chars_per_request)
     length = max_summarize_chars // max_chars_per_request
@@ -62,15 +62,14 @@ def summarize_large_text(conversations: Conversations,
         # by 20% and the request continues to be made.
         # The lower limit on the number of characters in a request
         # is set to 2000 to avoid multiple re-executions.
-        if max_chars_per_request < 2000:
+        if max_chars_per_request < 1000:
             raise e
         elif e.code == 'context_length_exceeded':
-            conversations = summarize_large_text(
+            return summarize_large_text(
                 conversations,
                 text,
                 max_chars_per_request=int(max_chars_per_request * 0.8)
             )
-            return conversations
         else:
             raise e
 
